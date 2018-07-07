@@ -28,7 +28,7 @@ class Server:
         return self.__ticks
 
     def get_current_number_of_clients(self):
-        assert(self.__no_connected_clients, len(self.clients))
+        assert (self.__no_connected_clients, len(self.clients))
         return self.__no_connected_clients
 
     def get_id(self):
@@ -49,6 +49,29 @@ class Server:
             self.clients.append(client)
             return_value = 0
         return return_value
+
+    '''
+        This method removes a client from server based
+        on its hash code
+    '''
+
+    def pop_client_hash_code(self, client_hash_code):
+        for c in range(0, len(self.clients)):
+            if self.clients[c].get_hash_code() == client_hash_code:
+                self.__no_connected_clients = self.__no_connected_clients - 1
+                return self.clients.pop(c)
+
+    '''
+        This method gets the client that has the smaller hop
+    '''
+    def pop_smaller_hop_client(self):
+        hops = []
+        for c in range(0, len(self.clients)):
+            hops.append(self.clients[c].get_current_hop)
+        self.__no_connected_clients = self.__no_connected_clients - 1
+        return self.clients.pop(hops.index(min(hops)))
+
+
 
     '''
         The update_server_status must be called each time a clock tick passes:
