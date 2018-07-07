@@ -13,9 +13,12 @@ class FileReadInput:
 
     # protected methods:
     def _compute_list_of_inputs(self):
-        f = open(self.filename, 'r')
-        list_of_inputs = file.readlines()
-        f.close()
+        try:
+            f = open(self.__filename, 'r')
+            list_of_inputs = file.readlines()
+            f.close()
+        except IOError:
+            print('The file %s could not be read' % self.__filename)
         return list_of_inputs
 
     # public methods
