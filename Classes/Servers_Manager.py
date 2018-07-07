@@ -65,6 +65,20 @@ class ServersManager:
                     non_added_clients = non_added_clients - 1
         return non_added_clients
 
+    def _check_positions_from_servers_list(self):
+        check_full_vec = []
+        self._remove_server_from_list_if_has_no_client()
+        for s in range(0, len(self.__servers_list)):
+            if self.__servers_list[s].get_current_number_of_clients() == self.__umax:
+                check_full_unit = {'Full': True, 'Pos': s,
+                                   'Number_of_clients': self.__servers_list[s].get_current_number_of_clients()}
+                check_full_vec.append(check_full_unit)
+            else:
+                check_full_unit = {'Full': False, 'Pos': s,
+                                   'Number_of_clients': self.__servers_list[s].get_current_number_of_clients()}
+                check_full_vec.append(check_full_unit)
+            return check_full_vec
+
     # public methods:
     def get_cost_current_tick(self):
         self._compute_cost_current_tick()
@@ -84,39 +98,25 @@ class ServersManager:
             for s in range(0, ssize):
                 self.__servers_list[s].update_server_status()
 
-    def _check_positions_from_servers_list(self):
-        check_full_vec = []
-        self._remove_server_from_list_if_has_no_client()
-        for s in range(0, len(self.__servers_list)):
-            if self.__servers_list[s].get_current_number_of_clients() == self.__umax:
-                check_full_unit = {'Full': True, 'Pos': s,
-                                   'Number_of_clients': self.__servers_list[s].get_current_number_of_clients()}
-                check_full_vec.append(check_full_unit)
-            else:
-                check_full_unit = {'Full': False, 'Pos': s,
-                                   'Number_of_clients': self.__servers_list[s].get_current_number_of_clients()}
-                check_full_vec.append(check_full_unit)
-            return check_full_vec
-
     def reorganize_clients_in_servers(self):
         tot_num_conn_clients = 0
         if len(self.__servers_list) > 0:
             for s in range(0, len(self.__servers_list)):
                 tot_num_conn_clients = tot_num_conn_clients + self.__servers_list[s].get_current_number_of_clients()
-        optimum_number_of_servers = (tot_num_conn_clients / self.__umax) + (tot_num_conn_clients % self.__umax)
-        if len(self.__servers_list) > optimum_number_of_servers:
-            check_full_vec = self.__check_positions_from_servers_list()
-            v = 0
-            while v < len(check_full_vec) - 1:
-                if check_full_vec[v]['Full'] == False:
-                    pos_to_insert = check_full_vec[v]['Pos']
-                    for c in range(v + 1, len(check_full_vec)):
-                        if check_full_vec[c]['Full'] == False:
-                            pos_to_remove = check_full_vec[c]['Pos']
-                            client = self.__servers_list[pos_to_remove].pop_smaller_hop_client()
-                            self.__servers_list[pos_to_insert].append(client)
-                    check_full_vec = self.__check_positions_from_servers_list()
-                v = v + 1
+            optimum_number_of_servers = (tot_num_conn_clients / self.__umax) + (tot_num_conn_clients % self.__umax)
+            if len(self.__servers_list) > optimum_number_of_servers:
+                check_full_vec = self.__check_positions_from_servers_list()
+                v = 0
+                while v < len(check_full_vec) - 1:
+                    if check_full_vec[v]['Full'] == False:
+                        pos_to_insert = check_full_vec[v]['Pos']
+                        for c in range(v + 1, len(check_full_vec)):
+                            if check_full_vec[c]['Full'] == False:
+                                pos_to_remove = check_full_vec[c]['Pos']
+                                client = self.__servers_list[pos_to_remove].pop_smaller_hop_client()
+                                self.__servers_list[pos_to_insert].append(client)
+                        check_full_vec = self.__check_positions_from_servers_list()
+                    v = v + 1
 
     def get_string_with_servers_and_clients(self):
         text_to_be_printed = ""
