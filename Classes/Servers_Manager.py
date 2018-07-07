@@ -29,6 +29,22 @@ class ServersManager:
                 assert isinstance(s, Server)
                 self.__servers_list.remove(s)
 
+    def _alloc_server_based_on_remaining_clients(self, non_added_clients, starting_point, client):
+        servers_to_alloc = (non_added_clients / self.__umax) + (non_added_clients % self.__umax)
+        for s in range(0, servers_to_alloc):
+            server = Server()
+            print('Added server with id: %s' % self._add_server_to_list(server))
+        s = starting_point
+        while non_added_clients > 0:
+            while s < len(self.__servers_list):
+                if type(client) is None:
+                    client = Client()
+                if self.__servers_list[s].add_client(client) == 1:
+                    s = s + 1
+                else:
+                    non_added_clients = non_added_clients - 1
+        return non_added_clients
+
     # public methods:
 
     def get_overall_ticks(self):
@@ -38,6 +54,23 @@ class ServersManager:
 
     def update_overall_ticks(self):
         self.__overall_ticks = self.__overall_ticks + 1
+
+    def update_all_servers_status(self):
+        ssize = len(self.__servers_list)
+        if ssize > 0:
+            for s in range(0, ssize):
+                self.__servers_list[s].update_server_status()
+
+    def reorganize_clients_in_servers(self):
+        ssize = len(self._add_server_to_list())
+        tot_num_conn_clients = 0
+        if ssize > 0:
+            for s in range(0, ssize):
+                tot_num_conn_clients = tot_num_conn_clients + self.__servers_list[s].get_current_number_of_clients()
+        optimum_number_of_servers = (tot_num_conn_clients / self.__umax) + (tot_num_conn_clients % self.__umax)
+        if ssize > optimum_number_of_servers:
+            pass # TODO:  implement logic to remove non necessary servers
+
 
     def get_string_with_servers_and_clients(self):
         text_to_be_printed = ""
@@ -65,21 +98,7 @@ class ServersManager:
             ans = self._alloc_server_based_on_remaining_clients(self, non_added_clients, 0, None)
         return ans
 
-    def _alloc_server_based_on_remaining_clients(self, non_added_clients, starting_point, client):
-        servers_to_alloc = (non_added_clients / self.__umax) + (non_added_clients % self.__umax)
-        for s in range(0, servers_to_alloc):
-            server = Server()
-            print('Added server with id: %s' % self._add_server_to_list(server))
-        s = starting_point
-        while non_added_clients > 0:
-            while s < len(self.__servers_list):
-                if type(client) is None:
-                    client = Client()
-                if self.__servers_list[s].add_client(client) == 1:
-                    s = s + 1
-                else:
-                    non_added_clients = non_added_clients - 1
-        return non_added_clients
+
 
 
 
