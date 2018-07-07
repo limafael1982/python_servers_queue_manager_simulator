@@ -6,4 +6,6 @@ This small project is designed to deal with the problem of keeping the cost of s
 For executing this project you will need:
 
 - python 2.7
+- python uuid package
+- python time package
 
