@@ -4,6 +4,8 @@
 ##########################################
 
 import Client
+from uuid import uuid4
+from time import strftime
 
 
 class Server:
@@ -13,6 +15,7 @@ class Server:
         self.__no_connected_clients = 0
         self.__umax = max_num_clients
         self.__max_hops = max_hops
+        self.__id = self._generate_server_id()
         self.clients = []
 
     # public methods:
@@ -48,11 +51,15 @@ class Server:
 
     # protected methods:
 
+    @staticmethod
+    def _generate_server_id():
+        return str(uuid4().hex) + strftime("%Y-%m-%d-%H-%M-%S")
+
     '''
-            The update_clients_hop returns:
-            0 -> if all the clients hop were successfully updated
-            1 -> if the clients list is empty
-        '''
+        The update_clients_hop returns:
+        0 -> if all the clients hop were successfully updated
+        1 -> if the clients list is empty
+    '''
 
     def _update_clients_hop(self):
         return_value = 1
