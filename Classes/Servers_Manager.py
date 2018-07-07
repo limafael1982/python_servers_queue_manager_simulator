@@ -52,17 +52,19 @@ class ServersManager:
     def _alloc_server_based_on_remaining_clients(self, non_added_clients, starting_point, client):
         servers_to_alloc = (non_added_clients / self.__umax) + (non_added_clients % self.__umax)
         for s in range(0, servers_to_alloc):
-            server = Server()
+            server = Server(self.__umax, self.__ttask)
             print('Added server with id: %s' % self._add_server_to_list(server))
         s = starting_point
         while non_added_clients > 0:
-            while s < len(self.__servers_list):
-                if type(client) is None:
+            while s < self.get_server_list_size():
+                if client is None:
                     client = Client()
                 if self.__servers_list[s].add_client(client) == 1:
                     s = s + 1
                 else:
                     non_added_clients = non_added_clients - 1
+                    if non_added_clients == 0:
+                        break
         return non_added_clients
 
     def _check_positions_from_servers_list(self):
@@ -77,12 +79,15 @@ class ServersManager:
                 check_full_unit = {'Full': False, 'Pos': s,
                                    'Number_of_clients': self.__servers_list[s].get_current_number_of_clients()}
                 check_full_vec.append(check_full_unit)
-            return check_full_vec
+        return check_full_vec
 
     # public methods:
     def get_cost_current_tick(self):
         self._compute_cost_current_tick()
         return self.__cost_current_tick
+
+    def get_server_list_size(self):
+        return len(self.__servers_list)
 
     def get_overall_ticks(self):
         return self.__overall_ticks
@@ -105,7 +110,7 @@ class ServersManager:
                 tot_num_conn_clients = tot_num_conn_clients + self.__servers_list[s].get_current_number_of_clients()
             optimum_number_of_servers = (tot_num_conn_clients / self.__umax) + (tot_num_conn_clients % self.__umax)
             if len(self.__servers_list) > optimum_number_of_servers:
-                check_full_vec = self.__check_positions_from_servers_list()
+                check_full_vec = self._check_positions_from_servers_list()
                 v = 0
                 while v < len(check_full_vec) - 1:
                     if not check_full_vec[v]['Full']:
@@ -115,7 +120,7 @@ class ServersManager:
                                 pos_to_remove = check_full_vec[c]['Pos']
                                 client = self.__servers_list[pos_to_remove].pop_smaller_hop_client()
                                 self.__servers_list[pos_to_insert].append(client)
-                        check_full_vec = self.__check_positions_from_servers_list()
+                        check_full_vec = self._check_positions_from_servers_list()
                     v = v + 1
 
     def get_string_with_servers_and_clients(self):
@@ -139,7 +144,7 @@ class ServersManager:
                         pass
                     else:
                         nserver = nserver + 1
-                ans = self._alloc_server_based_on_remaining_clients(non_added_clients, nserver, client)
+                non_added_clients = self._alloc_server_based_on_remaining_clients(non_added_clients, nserver, client)
         else:
-            ans = self._alloc_server_based_on_remaining_clients(self, non_added_clients, 0, None)
-        return ans
+            non_added_clients = self._alloc_server_based_on_remaining_clients(non_added_clients, 0, None)
+        return non_added_clients

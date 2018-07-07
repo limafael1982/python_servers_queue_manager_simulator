@@ -11,7 +11,7 @@ class Client:
 
     # constructor:
     def __init__(self):
-        self.__hash_code = self._generate_hash_code()
+        self.__hash_code = str(uuid4().hex)
         self.__hops = 0
         self.__date_of_creation = strftime("%Y-%m-%d--%H-%M-%S")
 
@@ -24,9 +24,3 @@ class Client:
 
     def get_hash_code(self):
         return self.__hash_code
-
-    # protected and static methods:
-    @staticmethod
-    def _generate_hash_code(self):
-        code = str(uuid4().hex)
-        return code

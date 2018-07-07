@@ -30,7 +30,7 @@ class FileReadInput:
     def write_text_to_output(self, text):
         try:
             f = open(self.__output_filename, 'a+')
-            f.write(text + '\n\r')
+            f.write(text)
             f.close()
         except IOError:
             print('The file %s could not be written' % self.__output_filename)
