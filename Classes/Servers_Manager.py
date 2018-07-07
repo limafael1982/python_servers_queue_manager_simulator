@@ -108,10 +108,10 @@ class ServersManager:
                 check_full_vec = self.__check_positions_from_servers_list()
                 v = 0
                 while v < len(check_full_vec) - 1:
-                    if check_full_vec[v]['Full'] == False:
+                    if not check_full_vec[v]['Full']:
                         pos_to_insert = check_full_vec[v]['Pos']
                         for c in range(v + 1, len(check_full_vec)):
-                            if check_full_vec[c]['Full'] == False:
+                            if not check_full_vec[c]['Full']:
                                 pos_to_remove = check_full_vec[c]['Pos']
                                 client = self.__servers_list[pos_to_remove].pop_smaller_hop_client()
                                 self.__servers_list[pos_to_insert].append(client)
@@ -122,7 +122,7 @@ class ServersManager:
         text_to_be_printed = ""
         if len(self.__servers_list) > 0:
             for s in self.__servers_list:
-                assert (s, Server)
+                assert isinstance(s, Server)
                 text_to_be_printed = text_to_be_printed + str(s.get_current_number_of_clients()) + " "
         return text_to_be_printed
 
@@ -130,7 +130,7 @@ class ServersManager:
         nserver = 0
         ans = -1
         non_added_clients = no_clients
-        if len(self.__servers_list > 0):
+        if len(self.__servers_list) > 0:
             while non_added_clients > 0:
                 client = Client()
                 while nserver < len(self.__servers_list):
