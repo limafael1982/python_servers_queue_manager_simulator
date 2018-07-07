@@ -3,7 +3,7 @@
 # Date of Creation: Friday, July 6 2018
 ##########################################
 
-import Client
+from Client import Client
 from uuid import uuid4
 from time import strftime
 
@@ -30,6 +30,9 @@ class Server:
     def get_current_number_of_clients(self):
         assert(self.__no_connected_clients, len(self.clients))
         return self.__no_connected_clients
+
+    def get_id(self):
+        return self.__id
 
     '''
         The add_client method returns:
@@ -64,6 +67,7 @@ class Server:
 
     @staticmethod
     def _generate_server_id():
+        # type: () -> id that identifies the server
         return str(uuid4().hex) + strftime("%Y-%m-%d-%H-%M-%S")
 
     '''
