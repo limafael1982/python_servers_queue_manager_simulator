@@ -6,6 +6,7 @@
 from Server import Server
 from Client import Client
 
+
 class ServersManager:
 
     # constructor
@@ -15,8 +16,21 @@ class ServersManager:
         self.__servers_list = []
         self.__ttask = ttask
         self.__umax = umax
+        self.__cost_current_tick = []
 
     # protected methods:
+
+    def _compute_cost_current_tick(self):
+        self.__cost_current_tick
+        for s in range(0, self.__servers_list):
+            self.__cost_current_tick.append(
+                dict(server_id=self.__servers_list[s].get_id, current_tick=self.__servers_list[s].get_server_tick))
+
+    def _compute_current_overall_cost(self):
+        current_price = 0
+        for s in range(0, self.__servers_list):
+            current_price = current_price + 1
+        self.__overall_cost = self.__overall_cost + current_price
 
     def _add_server_to_list(self, server):
         assert isinstance(server, Server)
@@ -52,14 +66,17 @@ class ServersManager:
         return non_added_clients
 
     # public methods:
+    def get_cost_current_tick(self):
+        self._compute_cost_current_tick()
+        return self.__cost_current_tick
 
     def get_overall_ticks(self):
         return self.__overall_ticks
 
-    # TODO: construct a logic to get the overall cost
-
     def update_overall_ticks(self):
         self.__overall_ticks = self.__overall_ticks + 1
+        for s in range(0, len(self.__servers_list)):
+            self.__servers_list[s].update_tick()
 
     def update_all_servers_status(self):
         ssize = len(self.__servers_list)
@@ -81,7 +98,6 @@ class ServersManager:
                 check_full_vec.append(check_full_unit)
             return check_full_vec
 
-
     def reorganize_clients_in_servers(self):
         tot_num_conn_clients = 0
         if len(self.__servers_list) > 0:
@@ -102,24 +118,11 @@ class ServersManager:
                     check_full_vec = self.__check_positions_from_servers_list()
                 v = v + 1
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     def get_string_with_servers_and_clients(self):
         text_to_be_printed = ""
         if len(self.__servers_list) > 0:
             for s in self.__servers_list:
-                assert(s, Server)
+                assert (s, Server)
                 text_to_be_printed = text_to_be_printed + str(s.get_current_number_of_clients()) + " "
         return text_to_be_printed
 
@@ -140,32 +143,3 @@ class ServersManager:
         else:
             ans = self._alloc_server_based_on_remaining_clients(self, non_added_clients, 0, None)
         return ans
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
