@@ -3,9 +3,9 @@
 # Date of Creation: Friday, July 6 2018
 ##########################################
 
-
 from uuid import uuid4
 from time import strftime
+
 
 class Client:
 
@@ -18,6 +18,9 @@ class Client:
     # public methods:
     def increase_hop(self):
         self.__hops = self.__hops + 1
+
+    def get_current_hop(self):
+        return self.__hops
 
     def get_hash_code(self):
         return self.__hash_code
