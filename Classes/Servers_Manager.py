@@ -39,7 +39,6 @@ class ServersManager:
     def update_overall_ticks(self):
         self.__overall_ticks = self.__overall_ticks + 1
 
-
     def get_string_with_servers_and_clients(self):
         text_to_be_printed = ""
         if len(self.__servers_list) > 0:
@@ -48,15 +47,60 @@ class ServersManager:
                 text_to_be_printed = text_to_be_printed + str(s.get_current_number_of_clients()) + " "
         return text_to_be_printed
 
-    def add_input_client_to_server_list(self, no_clients):
-        if len(self.__servers_list) == 0:
-            added_clients = 0
-            server = Server(self.__umax, self.__ttask)
-            # TODO: continue this logic
-            while added_clients < no_clients:
+    def add_input_clients_to_server_set(self, no_clients):
+        nserver = 0
+        ans = -1
+        non_added_clients = no_clients
+        if len(self.__servers_list > 0):
+            while non_added_clients > 0:
                 client = Client()
-                if server.add_client(client) == 0:
-                    added_clients = added_clients + 1
+                while nserver < len(self.__servers_list):
+                    if self.__servers_list[nserver].add_client(client) == 0:
+                        non_added_clients = non_added_clients - 1
+                        pass
+                    else:
+                        nserver = nserver + 1
+                ans = self._alloc_server_based_on_remaining_clients(non_added_clients, nserver, client)
+        else:
+            ans = self._alloc_server_based_on_remaining_clients(self, non_added_clients, 0, None)
+        return ans
+
+    def _alloc_server_based_on_remaining_clients(self, non_added_clients, starting_point, client):
+        servers_to_alloc = (non_added_clients / self.__umax) + (non_added_clients % self.__umax)
+        for s in range(0, servers_to_alloc):
+            server = Server()
+            print('Added server with id: %s' % self._add_server_to_list(server))
+        s = starting_point
+        while non_added_clients > 0:
+            while s < len(self.__servers_list):
+                if type(client) is None:
+                    client = Client()
+                if self.__servers_list[s].add_client(client) == 1:
+                    s = s + 1
+                else:
+                    non_added_clients = non_added_clients - 1
+        return non_added_clients
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
