@@ -90,7 +90,7 @@ class Server:
 
     @staticmethod
     def _generate_server_id():
-        # type: () -> id that identifies the server
+        # type: () -> string
         return str(uuid4().hex) + strftime("%Y-%m-%d-%H-%M-%S")
 
     '''
