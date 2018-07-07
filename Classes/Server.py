@@ -12,6 +12,7 @@ class Server:
 
     # constructor:
     def __init__(self, max_num_clients, max_hops):
+        self.__ticks = 0
         self.__no_connected_clients = 0
         self.__umax = max_num_clients
         self.__max_hops = max_hops
@@ -19,6 +20,16 @@ class Server:
         self.clients = []
 
     # public methods:
+
+    def update_tick(self):
+        self.__ticks = self.__ticks + 1
+
+    def get_server_tick(self):
+        return self.__ticks
+
+    def get_current_number_of_clients(self):
+        assert(self.__no_connected_clients, len(self.clients))
+        return self.__no_connected_clients
 
     '''
         The add_client method returns:
