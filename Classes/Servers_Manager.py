@@ -106,6 +106,7 @@ class ServersManager:
                 self.servers_list[s].update_server_status()
 
     def reorganize_clients_in_servers(self):
+        self.remove_server_from_list_if_has_no_client()
         tot_num_conn_clients = 0
         if len(self.servers_list) > 0:
             for s in range(0, len(self.servers_list)):
@@ -126,6 +127,7 @@ class ServersManager:
                     v = v + 1
 
     def get_string_with_servers_and_clients(self):
+        self.remove_server_from_list_if_has_no_client()
         text_to_be_printed = ""
         if len(self.servers_list) > 0:
             for s in self.servers_list:
@@ -151,8 +153,11 @@ class ServersManager:
         return non_added_clients
 
     def remove_server_from_list_if_has_no_client(self):
-        for s in self.servers_list:
-            if s.get_current_number_of_clients() == 0:
-                assert isinstance(s, Server)
-                server_id = s.get_id()
-                self._remove_server_from_list_based_on_id(server_id)
+        size_servers_list = len(self.servers_list)
+        while size_servers_list > 0:
+            for s in self.servers_list:
+                if s.get_current_number_of_clients() == 0:
+                    assert isinstance(s, Server)
+                    server_id = s.get_id()
+                    self._remove_server_from_list_based_on_id(server_id)
+            size_servers_list = size_servers_list - 1
