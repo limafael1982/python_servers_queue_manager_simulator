@@ -28,7 +28,7 @@ class Server:
         return self.__ticks
 
     def get_current_number_of_clients(self):
-        assert (self.__no_connected_clients, len(self.clients))
+        assert self.__no_connected_clients == len(self.clients)
         return self.__no_connected_clients
 
     def get_id(self):
