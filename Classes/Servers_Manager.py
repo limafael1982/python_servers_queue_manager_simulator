@@ -43,13 +43,6 @@ class ServersManager:
                 assert isinstance(s, Server)
                 self.servers_list.remove(s)
 
-    def _remove_server_from_list_if_has_no_client(self):
-        for s in self.servers_list:
-            if s.get_current_number_of_clients() == 0:
-                assert isinstance(s, Server)
-                server_id = s.get_id()
-                self._remove_server_from_list_based_on_id(server_id)
-
     def _insert_client_at_given_position_server(self, pos, client):
         assert isinstance(client, Client)
         retval = self.servers_list[pos].add_client(client)
@@ -74,7 +67,7 @@ class ServersManager:
 
     def _check_positions_from_servers_list(self):
         check_full_vec = []
-        self._remove_server_from_list_if_has_no_client()
+        self.remove_server_from_list_if_has_no_client()
         for s in range(0, len(self.servers_list)):
             if self.servers_list[s].get_current_number_of_clients() == self.__umax:
                 check_full_unit = {'Full': True, 'Pos': s,
@@ -156,3 +149,10 @@ class ServersManager:
         else:
             non_added_clients = self._alloc_server_based_on_remaining_clients(non_added_clients, 0)
         return non_added_clients
+
+    def remove_server_from_list_if_has_no_client(self):
+        for s in self.servers_list:
+            if s.get_current_number_of_clients() == 0:
+                assert isinstance(s, Server)
+                server_id = s.get_id()
+                self._remove_server_from_list_based_on_id(server_id)
