@@ -6,13 +6,13 @@
 from Classes.Servers_Manager import ServersManager
 from File_Utils.File_Read_Input import FileReadInput
 
-INPUTFILEPATH = 'resources/others/input_testing'
-OUTPUTFILEPATH = 'resources/others/output_testing.txt'
-TTASK = 4
-UMAX = 2
+INPUTFILEPATH = 'resources/others/input1.txt'
+OUTPUTFILEPATH = 'resources/others/output_from_input1.txt'
+TTASK = 5
+UMAX = 10
 
 fsimul = FileReadInput(INPUTFILEPATH, OUTPUTFILEPATH)
-sm = ServersManager(4, 2)
+sm = ServersManager(TTASK, UMAX)
 
 list_of_inputs = fsimul.get_list_of_inputs()
 tick = 0
