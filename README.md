@@ -8,6 +8,7 @@ For executing this project you will need:
 - `python 2.7`
 - `python uuid package`
 - `python time package`
+- `python pytest package`
 
 ## Downloading the source code:
 
