@@ -12,7 +12,7 @@ class Client:
     # constructor:
     def __init__(self):
         self.__hash_code = str(uuid4().hex)
-        self.__hops = 0
+        self.__hops = 1
         self.__date_of_creation = strftime("%Y-%m-%d--%H-%M-%S")
 
     # public methods:

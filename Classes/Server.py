@@ -12,7 +12,7 @@ class Server:
 
     # constructor:
     def __init__(self, max_num_clients, max_hops):
-        self.__ticks = 0
+        self.__ticks = 1
         self.__no_connected_clients = 0
         self.__umax = max_num_clients
         self.__max_hops = max_hops
@@ -128,7 +128,7 @@ class Server:
         return_value = 1
         if len(self.clients) > 0:
             for i in range(0, len(self.clients)):
-                if self.clients[i].get_current_hop() >= self.__max_hops:
+                if self.clients[i].get_current_hop() > self.__max_hops:
                     clients_hash_to_remove.append(self.clients[i].get_hash_code())
                     return_value = 0
         if len(clients_hash_to_remove) > 0:
